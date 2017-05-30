@@ -10,8 +10,10 @@ function(request, sender, sendResponse) {
     //split into two regex patterns so it is a bit more clear what they actually do
     isbnScan = request.content.match(/ISBN(-*1(?:(0)|3))?:?\s*?(97(8|9))?\d{9}(\d|X)/i);
     isbnScan2 = request.content.match(/ISBN(-*1(?:(0)|3))?:?\s[0-9]{1,}(\s|-)[0-9]{1,}(\s|-)[0-9]{4,}(\s|-)[0-9]{1,}(\s|-)(([0-9]|x){1,})*/i);
+    asinScan = request.content.match(/ASIN:.*?'(.*?)'/i);
     console.log('isbn = ' + isbnScan);
     console.log('isbn2 = ' + isbnScan2);
+    console.log('asin = ' + asinScan);
     var isbnResult = null;
     if (isbnScan != null) {
     console.log(isbnScan);
@@ -24,6 +26,9 @@ function(request, sender, sendResponse) {
         var tmp = isbnScan2[0]
         isbnResult = tmp.match(/[0-9]{1,}(\s|-)[0-9]{1,}(\s|-)[0-9]{4,}(\s|-)[0-9]{1,}(\s|-)(([0-9]|x){1,})*/gm);
         console.log('result' + isbnResult);
+    } else if (asinScan != null) {
+        isbnResult = asinScan[1];
+        console.log('ASIN: ' + asinScan[1]); 
     }
 
     if (isbnResult != null) {
